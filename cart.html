@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Bán Hoa Quả Sạch</title>
+    <link rel="stylesheet" type="text/css" href="cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var cart = sessionStorage.getItem("cart");
+            cartProducts = "["+cart+"]";
+            products = JSON.parse(cartProducts);
+            var amount = products.length;
+            // alert(amount);
+            $("#cart-amount").text("Giỏ hàng ("+amount+")");
+
+            var table = `
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>STT</th>
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th>Xóa</th>
+                    </tr>
+            `;
+            // alert(table);
+            for(var i=0; i<amount; i++){
+                var row = `
+                    <tr>
+                        <td>${i+1}</td>
+                        <td><img src="${products[i].img}"></td>
+                        <td>${products[i].name}</td>
+                        <td>${products[i].price}</td>
+                        <td>
+                            <input id="btn-minus" type="button" value="-">
+                            <input id="txt-amount" type="text" value="1">
+                            <input id="btn-plus" type="button" value="+">
+                        </td>
+                        <td>${products[i].price}</td>
+                        <td><i class="fa-solid fa-trash-can"></i></td>
+                    </tr>
+                `;
+                table += row;
+            }
+            table += `</table>`;
+
+            $("#cart-products").html(table);
+
+            $("#btn-plus").click(function(){
+                var amount = $(this).prev().attr("value");
+                var a = Number(amount) + 1;
+                $(this).prev().attr("value",a);
+
+                //Lấy giá
+                var price = $(this).parent().prev().next();
+                price = price.replace("đ","");
+                price = price.replace(".","");
+                var p = Number(price);
+
+                //Thành tiền
+                var total = a*p;
+                var total2 = "";
+                if(total>1000000){
+                    p1 = total/1000000;
+                    p2 = (total-p1*1000000)/1000;
+                    if(p2 > 0)
+                        total2 = p1+"."+p2+".000";
+                    else
+                        total2 = p1+".000.000";
+                }
+                else{
+                    p1 = total/1000;
+                    total2 = p1+".000";
+                }
+                //Truy suất và gán vào ô thành tiền
+                $(this).parent().next().text(total+"đ")
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header>
+			<img src='header.jpg' alt='header'/>
+		</header>
+		<nav>
+			<div class='container'>
+				<ul>
+					<li><a href='file:///D:/%C4%90%E1%BB%93%20%C3%A1n%202/doan2.html'><img style='width:150px' src='logo1.jpg' alt='logo'/></a></li>
+					<li id='address-form'><a href='#'>Hưng Yên<i class="fa-solid fa-caret-down"></i></a></li>
+						
+					<li><input type='text' placeholder='Bạn tìm gì...'/></li>
+					<li><a href='file:///D:/%C4%90%E1%BB%93%20%C3%A1n%202/cart.html'><button><i class="fa-solid fa-cart-shopping"></i>Giỏ hàng</button></a></li>
+					<li><a href=''>Lịch sử <br> đơn hàng</a></li>
+					<li><a href=''><span class='button0'><span class='button1'>.</span></span>Mua thẻ nạp ngay!</a></li>
+					<li><a href=''>24h Công nghệ</a></li>
+					<li><a href=''>Hỏi đáp</a></li>
+					<li><a href=''>Game App</a></li>
+						<div class='address-form'>
+							<div class='address-form-content'>
+								<h2>Chọn địa chỉ nhận hàng <span id='address-close'>X Đóng</span></h2>
+								<form action=''>
+									<p>Quý khách vui lòng cho biết Địa Chỉ Nhận Hàng để biết chính xác thời gian giao hàng</p>
+									<select name='' >
+										<option value='#'>--Chọn địa điểm</option>
+										<option value='#'>Hưng Yên</option>
+									</select>
+									<select name='' >
+										<option value='#'>--Chọn Quận\Huyện</option>
+										<option value='#'>Mỹ Hào</option>
+										<option value='#'>Yên Mỹ</option>
+										<option value='#'>Khoái Châu</option>
+									</select>
+									<select name='' >
+										<option value='#'>--Chọn phường\xã</option>
+										<option value='#'>Nhân Hoà</option>
+									</select>
+									<input type='text' placeholder='Số nhà, tên đường'></input>
+									<button id='address-accept'>Xác nhận</button>
+								</form>
+							</div>
+						</div>
+				</ul>
+			</div>
+		</nav>
+		<section class='menu-bar'>
+			<div class='container'>
+				<div class='menu-bar-content'>
+					<ul>
+						<li><a href=''><i class="fa-solid fa-mobile-screen-button"></i>Điện thoại</a></li>
+						<li><a href=''><i class="fa-solid fa-laptop"></i>Laptop</a></li>
+						<li><a href=''><i class="fa-solid fa-tablet"></i>Tablet</a></li>
+						<li><a href=''><i class="fa-solid fa-headphones"></i>Phụ kiện<i style='margin-left:3px;' class="fa-solid fa-caret-down"></i></a>
+							<div class='submenu'>
+								<ul>
+									<li> <a href=''>Sạc dự phòng</a></li>
+									<li> <a href=''>Sạc,cáp</a></li>
+									<li> <a href=''>Miếng dán màn hình</a></li>
+									<li> <a href=''>Ốp lưng điện thoại</a></li>
+									<li> <a href=''>Ốp lưng máy tính bảng</a></li>
+									<li> <a href=''>Giá đỡ điện thoại</a></li>
+									<li> <a href=''>Đế, móc điện thoại</a></li>
+									<li> <a href=''>Gậy chụp ảnh, Gimbal</a></li>
+									<li> <a href=''>Túi chống nước</a></li>
+									<li> <a href=''>Tai nghe</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href=''><i class="fa-solid fa-watch-apple"></i>Smartwatch</a></li>
+						<li><a href=''><i class="fa-solid fa-gem"></i>AVAJi<i style='margin-left:3px;' class="fa-solid fa-caret-down"></i></a>
+							<div class='submenu2'>
+								<ul>
+									<li> <a href=''>Đồng hồ thời trang</a></li>
+									<li> <a href=''>Mắt kính</a></li>
+									<li> <a href=''>Trang sức</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href=''><i class="fa-solid fa-computer"></i>PC, Máy in<i style='margin-left:3px;' class="fa-solid fa-caret-down"></i></a>
+							<div class='submenu3'>
+								<ul>
+									<li> <a href=''>Máy in</a></li>
+									<li> <a href=''>Mực in</a></li>
+									<li> <a href=''>Màn hình máy tính</a></li>
+									<li> <a href=''>Máy tính để bàn</a></li>
+								</ul>
+							</div>
+						</li>
+						<li><a href=''>Máy cũ giá rẻ</a></li>
+						<li><a href=''>Sim, thẻ cào</a></li>
+						<li><a href=''>Trả góp, Điện nước</a></li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+    </div>
+    <div id="container">
+        <div id="content">
+            <div id="left-content">
+                <h2>GIỎ HÀNG</h2>
+                <div id="cart-products"></div>
+            <div id="right-content">
+                <div id="delivery-to">
+                    <h3>Giao hàng tới</h3>
+                    <p><b>Nguyễn Cao Hùng | 0335.242.002</b><br>
+                        <span style="color: #ccc"> Tòa nhà 24, Khoái Châu - Hưng Yên</span>
+                    </p>
+                </div>
+                <div id="coupon">
+                    <b>Thông tin khuyến mại</b>
+                </div>
+                <div id="payment">
+                    <p>
+                        <span>Tạm tính: </span><span class="price">150.000đ</span>
+                    </p>
+                    <p>
+                        <span>Giảm giá: </span><span class="price">15.000đ</span>
+                        <hr>
+                    </p>
+                    <p>
+                        <span>Tổng cộng: </span><span class="price">135.000đ</span>
+                    </p>
+                </div>
+                <div id="process">
+                    <input type="button" value="Thanh toán">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both"></div>
+    <div id="footer">
+        <div id="footer-content">
+            <div class="footer-items">
+                <h3>LIÊN HỆ</h3>
+                <ul class="list-menu">
+                    <li>
+                        <p>Chúng tôi chuyên cung cấp các sản phẩm thực phẩm sạch an toàn cho sức khỏe con người</p>
+                    </li>
+                    <li>
+                        <p>Ladeco Building, 266 Doi Can Steet, Hà Nội, VietNam</p>
+                    </li>
+                    <li>
+                        <p>1900 6750 <br>
+                        Thứ 2 - Chủ nhật: 9:00 - 18:00</p>
+                    </li>
+                    <li>
+                        <a style="color: white; text-decoration: none" href="#">support@sapo.vn</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-items">
+                <h3>DANH MỤC</h3>
+                <ul class="list-menu">
+                    <li>Trang chủ</li>
+                    <li>Sản phẩm</li>
+                    <li>Giới thiệu</li>
+                    <li>Tin tức</li>
+                    <li>Liên hệ</li>
+                    <li>Chỉ đường</li>
+                </ul>
+            </div>
+            <div class="footer-items">
+                <h3>HỖ TRỢ KHÁCH HÀNG</h3>
+                <ul class="list-menu">
+                    <li>Trang chủ</li>
+                    <li>Sản phẩm</li>
+                    <li>Giới thiệu</li>
+                    <li>Tin tức</li>
+                    <li>Liên hệ</li>
+                    <li>Chỉ đường</li>
+                </ul>
+            </div>
+            <div class="footer-items">
+                <h3>KẾT NỐI VỚI DUALEO</h3>
+                <ul class="list-menu">
+                    <li>Trang chủ</li>
+                    <li>Sản phẩm</li>
+                    <li>Giới thiệu</li>
+                    <li>Tin tức</li>
+                    <li>Liên hệ</li>
+                    <li>Chỉ đường</li>
+                </ul>
+            </div>
+        </div>
+        <div style="background-color: #ff9933; height: 60px; width: 100%;">
+            <div id="copyright">
+                <div id="name-copyright">
+                    <span style="color: white">© Bản quyền thuộc về <b>Dualeo | </b>Cung cấp bởi <b>Sapo</b></span>
+                </div>
+                <div class="menu">
+                    <ul>
+                        <li><a href="#">Trang chủ</a></li>
+                        <li><a href="#">Giới thiệu</a></li>
+                        <li><a href="#">Sản phẩm</a>
+                        <li><a href="#">Tin tức</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                        <li><a href="#">Chỉ đường</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="quick-contact">
+        <ul>
+            <li>
+                <a href="https://g.page/congtysapo?share" target="_blank">
+                    <img src="https://img.icons8.com/glyph-neue/2x/place-marker.png" alt="">
+                    Tìm đường
+                </a>
+            </li>
+            <li>
+                <a href="https://zalo.me" target="_blank">
+                    <img src="https://img.icons8.com/ios/2x/zalo.png" alt="">
+                    Chat Zalo
+                </a>
+            </li>
+            <li>
+                <a href="https://www.messenger.com/t/id" target="_blank">
+                    <img src="https://img.icons8.com/material-outlined/2x/facebook-messenger.png" alt="">
+                    Messenger
+                </a>
+            </li>
+            <li><a href="#"><i class="fa-solid fa-angle-up"></i></a></li>
+        </ul>
+    </div>
+    
+</body>
+
+</html>
